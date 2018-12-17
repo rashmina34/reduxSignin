@@ -1,4 +1,4 @@
-import { submitlogin } from './apiConnection';
+// import  submitLogin  from './apiConnection';
 import {
         LOGIN_REQUEST,
         LOGGED_IN,
@@ -15,7 +15,7 @@ export function loginRequest(data){
     }
 }
 
-export function loginSuccess(user){
+export function loginSuccess(user){ debugger;
     return {
         type : LOGGED_IN,
         user
@@ -48,14 +48,4 @@ export function loginByTokenFailure(error){
         type: LOGIN_BY_TOKEN_FAILURE,
         error
     }
-}
-
-export function login(Data) {
-    return function (dispatch) {
-        return submitlogin(Data).then(Token => {
-            dispatch(loginSuccess(Token));
-        }).catch(error => {
-            throw (error);
-        });
-    };
 }

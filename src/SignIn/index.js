@@ -203,10 +203,15 @@
 
 
 
-import React, { PropTypes} from 'react';
+import React from 'react';
 import SigninForm from './signinForm';
-//import { ReactComponent } from '*.svg';
-import {loginRequest} from './action';
+import {loginRequest, loginSuccess } from './action';
+import  submitLogin  from './apiConnection';
+import { connect } from 'react-redux';
+//import {browserHistory} from 'react-router-dom';
+//import Redirectlogin from './sagas';
+//import saga from './sagas';
+
 
 class Signin extends React.Component{
   constructor(props){
@@ -227,19 +232,42 @@ class Signin extends React.Component{
         password: ''
       }
     };
-    //this.onSubmit = this.onSubmit.bind(this);//onSubmit
-    //this.onChange = this.onChange.bind(this);//onchange
   }
+
+  componentDidMount() {
+    if( this.props.loggedIn){
+      console.log("redirect to dashboard");
+    }
+  }
+
+    login = (Data)=> { 
+      console.log('.....data is feetching ')
+        return submitLogin(Data).then(token => {
+          // this.props.history.push("/dshboard/superadmin");
+          //browserHistory.push('/dshboard/superadmin');
+            // this.props.loginSuccess(token);
+            
+        }).catch(error => {
+            throw (error);
+        });
+       
+}
+
   
 
-  onSubmit = (event)=> {
+  onSubmit = (event)=> { 
     event.preventDefault();
     const {email, password} = this.state.data;
+    //this.props.submitform(data);
     const errors = this.validate();
     this.setState({ errors });
     if(Object.keys(errors).length === 0){
-      loginRequest(email, password)
+     let data = this.login(this.state.data);
+     if (data && data.token){
+       this.props.loginSuccess(data.token)
+     }
     }
+    
   }
   validate = () => {
         const { data } = this.state;
@@ -286,13 +314,26 @@ class Signin extends React.Component{
       }
   }
 
-  
+  const mapStateToProps = (state) => {
+    console.log(state); 
+    return {
+      loggedIn : state.isLoggedIn
 
+    }
+  }
 
-// Signin.contextTypes = {
-//   router: PropTypes.object.isRequired
-//}
+  const mapDispatchToProps = (dispatch) => {
+    debugger;
+    return {
+    
+      loginSuccess: (data) => dispatch(loginSuccess(data)),
+      loginRequest: (email,password) => dispatch(loginRequest(email,password)),
+      //submitform: (data) => dispatch(loginSuccess(data)),
+      }
+    }
 
- export default Signin;
+    //const withsaga = Redirectlogin({ key : 'homesaga', saga}) 
+
+ export default connect( mapStateToProps ,mapDispatchToProps)(Signin);
   
 
