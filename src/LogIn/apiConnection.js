@@ -1,5 +1,4 @@
 
-
 function submitLogin(login) { 
     console.log('working');
     
@@ -16,7 +15,7 @@ function submitLogin(login) {
 
         }).then(res=>res.json())
         .then(res => {
-            console.log('item set', res);
+            console.log('data is set in localstorage',res);
             localStorage.setItem('token',res.data.token);
             return res.data;
         }
