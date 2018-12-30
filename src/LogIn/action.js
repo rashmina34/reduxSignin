@@ -14,7 +14,7 @@ return {
 }
 }
 
-export function loginSuccess(user){ 
+export function loginSuccess(user){  
 return {
     type : LOGGED_IN,
     user
